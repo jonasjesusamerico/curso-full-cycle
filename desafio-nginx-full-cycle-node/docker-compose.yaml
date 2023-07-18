@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  db: 
+    container_name: my-sql
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: full-cycle
+    networks:
+      - nginx-net
+
+  app:
+    restart: always
+    container_name: node-app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s npm start
+    build: 
+      context: app
+    depends_on: 
+      - db
+    networks:
+      - nginx-net
+  ngnix:
+    restart: always
+    container_name: nginx-server
+    build: ./nginx/
+    depends_on: 
+      - app
+    networks:
+      - nginx-net
+    ports:
+      - 8080:80
+
+networks:
+  nginx-net:
+    name: nginx-net
+    driver: bridge
