@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod # Tipo do pod
+metadata: #informações do pod
+  name: "goserver"
+  labels: # utilizado para filtros
+    app: "goserver"
+spec: #especificação do pod
+  containers:
+    - name: goserver
+      image: "jonasjesusamerico/hello-go:latest"
