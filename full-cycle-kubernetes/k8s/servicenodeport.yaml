@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: goserver-service
+spec:
+  selector:
+    app: goserver
+  type: NodePort
+  ports:
+    - name: goserver-service
+      port: 8080
+      targetPort: 8000 # Faz o redicioramento do ip da maquina para o ip interno
+      protocol: TCP
+      nodePort: 30001
