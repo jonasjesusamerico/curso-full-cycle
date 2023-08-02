@@ -9,5 +9,5 @@ spec:
   ports:
     - name: goserver-service
       port: 8080
-      targetPort: 8000 # Faz o redicioramento do ip da maquina para o ip do container
+      targetPort: 8080 # Faz o redicioramento do ip da maquina para o ip do container
       protocol: TCP
