@@ -6,10 +6,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
+
+var startedAt = time.Now()
 
 func main() {
 	fmt.Println("oi")
+
+	http.HandleFunc("/healthz", healthz)
 	http.HandleFunc("/secret", secret)
 	http.HandleFunc("/configmap", configMap)
 	err := http.ListenAndServe(":8080", nil)
@@ -40,4 +45,18 @@ func configMap(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Error reading file: ", err)
 	}
 	fmt.Fprintf(w, "My Family: %s.", string(data))
+}
+
+func healthz(w http.ResponseWriter, r *http.Request) {
+
+	duration := time.Since(startedAt)
+
+	if duration.Seconds() < 10 {
+		w.WriteHeader(500)
+		w.Write([]byte(fmt.Sprintf("Duration: %v", duration.Seconds())))
+	} else {
+		w.WriteHeader(200)
+		w.Write([]byte("ok"))
+	}
+
 }
