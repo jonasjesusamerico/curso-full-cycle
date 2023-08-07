@@ -56,12 +56,20 @@ spec:
             - secretRef:
                 name: goserver-secret
           volumeMounts:
-            - mountPath: "go/myfamily"
+            - mountPath: "/go/myfamily"
               name: config
-      config:
-        metadata:
-          name: configmap-family
-        data:
-          - key: menbers
-            path: "family.txt"
+              readOnly: true
+            - mountPath: "/go/pvc"
+              name: goserver-volume
+      volumes:
+        - name: goserver-volume
+          persistentVolumeClaim:
+            claimName: goserver-pvc
+
+        - name: config
+          configMap:
+            name: configmap-family
+            items:
+            - key: members
+              path: "family.txt"  
         
